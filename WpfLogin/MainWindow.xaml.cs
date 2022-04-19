@@ -26,9 +26,9 @@ namespace WpfLogin
             InitializeComponent();
         }
 
-        private bool IsPasswordOK(string password)
+        private bool IsPasswordOK(string password, IValidator valid)
         {
-            return password.Length > 7 && Regex.IsMatch(password, "w*\\dw*");
+            return valid.IsPasswordValid(password);
         }
 
         private void Submit_Click(object sender, RoutedEventArgs e)
@@ -39,35 +39,13 @@ namespace WpfLogin
 
         private void Password_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (IsPasswordOK((sender as TextBox).Text))
+            // modifikuj pouze instanci IValidator, pokud chceš jiná kritéria
+            if (IsPasswordOK((sender as TextBox).Text, new ValidatorSpecialChars()))
             {
                 Error.Visibility = Visibility.Hidden;
                 return;
             }
             Error.Visibility = Visibility.Visible;
-        }
-    }
-
-    public class SuperUser
-    {
-        public string UserID { get; set; }
-        public string Password { get; set; }
-
-        static SuperUser instance;
-
-        private SuperUser(string id, string pwd)
-        {
-            UserID = id;
-            Password = pwd;
-        }
-        public static SuperUser GetOrCreate(string id, string pwd)
-        {
-            if (instance == null)
-            {
-                instance = new SuperUser(id, pwd);
-            }
-
-            return instance;
         }
     }
 }
