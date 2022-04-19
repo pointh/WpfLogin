@@ -1,0 +1,30 @@
+﻿<Window x:Class="WpfLogin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfLogin"
+        mc:Ignorable="d"
+        Title="Přihlášení" Height="80" Width="800">
+    <StackPanel Orientation="Horizontal">
+        <Label Content="User ID"/>
+        <TextBox Name="UserID" 
+                 Width="100" 
+                 Margin="0, 0, 50, 0" 
+                 Background="LightGoldenrodYellow"/>
+        <Label Content="Heslo"/>
+        <TextBox Name="Password" 
+                 Width="100" 
+                 Margin="0, 0, 50, 0" 
+                 Background="LightGoldenrodYellow" 
+                 TextChanged="Password_TextChanged"/>
+        <Label Name="Error" 
+               Width="200" 
+               Content="Chyba hesla" 
+               Foreground="Red"/>
+        <Button x:Name="Submit" 
+                Content="Odeslat" 
+                HorizontalAlignment="Right" 
+                Click="Submit_Click"/>
+    </StackPanel>
+</Window>
