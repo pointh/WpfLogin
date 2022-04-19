@@ -44,7 +44,6 @@ namespace WpfLogin
                 Error.Visibility = Visibility.Hidden;
                 return;
             }
-
             Error.Visibility = Visibility.Visible;
         }
     }
