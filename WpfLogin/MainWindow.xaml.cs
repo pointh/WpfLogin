@@ -40,7 +40,7 @@ namespace WpfLogin
         private void Password_TextChanged(object sender, TextChangedEventArgs e)
         {
             // modifikuj pouze instanci IValidator, pokud chceš jiná kritéria
-            if (IsPasswordOK((sender as TextBox).Text, new ValidatorSpecialChars()))
+            if (IsPasswordOK((sender as TextBox).Text, new ValidatorWithHistory("RootPasswordHistory.txt", new ValidatorNumbers())))
             {
                 Error.Visibility = Visibility.Hidden;
                 return;
