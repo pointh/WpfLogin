@@ -1,4 +1,6 @@
-﻿namespace WpfLogin
+﻿using System;
+
+namespace WpfLogin
 {
     public class SuperUser : CommonUser
     {
@@ -24,6 +26,19 @@
             }
 
             return instance;
+        }
+
+        public static void Logout()
+        {
+            instance = null;
+        }
+
+        internal static void ChangePasswordTo(string text)
+        {
+            if (instance is not null)
+            {
+                instance.Password = text;
+            }
         }
     }
 }

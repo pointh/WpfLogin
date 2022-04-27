@@ -22,6 +22,8 @@ namespace WpfLogin
     public partial class MainWindow : Window
     {
         CommonUser user;
+        LoginError loginError;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,16 +33,23 @@ namespace WpfLogin
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            if (user.ValidatePassword(
+            loginError = user.ValidatePassword(
                 new List<IValidator>(
                     new IValidator[] {
                         new ValidatorSpecialChars(),
                         new ValidatorNumbers()
-                    })
-                ) == LoginError.OK)
+                    }));
+
+            if (loginError == LoginError.OK)
             {
                 App.Root = SuperUser.GetOrCreate(UserID.Text, Password.Text);
                 Title = "Přihlášený " + App.Root.UserID;
+                Password.Text = string.Empty;
+            }
+            else
+            {
+                Error.Content = loginError.ToString();
+                Error.Visibility = Visibility.Visible;
             }
         }
 
@@ -48,19 +57,55 @@ namespace WpfLogin
         {
             user.Password = (sender as TextBox).Text;
             // modifikuj pouze instanci IValidator[], pokud chceš jiná kritéria
-            if (user?.ValidatePassword(
+            loginError = user.ValidatePassword(
                 new List<IValidator>(
-                    new IValidator[] { 
-                        new ValidatorSpecialChars(), 
-                        new ValidatorNumbers() 
-                    })
-                ) == LoginError.OK)
+                    new IValidator[] {
+                        new ValidatorSpecialChars(),
+                        new ValidatorNumbers()
+                    }));
+
+            if (loginError == LoginError.OK)
             {
                 user.Password = Password.Text;
                 Error.Visibility = Visibility.Hidden;
                 return;
             }
+
+            Error.Content = loginError.ToString();
             Error.Visibility = Visibility.Visible;
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Root is not null)
+            {
+                SuperUser.Logout();
+                Title = string.Empty;
+            }
+        }
+
+        private void Change_Click(object sender, RoutedEventArgs e)
+        {
+            if (App.Root == null)
+            {
+                Error.Content = "Změna pouze po přihlášení";
+                Error.Visibility = Visibility.Visible;
+                return;
+            }
+
+            loginError = user.ValidatePassword(
+                new List<IValidator>(
+                    new IValidator[] {
+                        new ValidatorSpecialChars(),
+                        new ValidatorNumbers()
+            }));
+
+            if (loginError == LoginError.OK)
+            {
+                SuperUser.ChangePasswordTo(Password.Text);
+                Password.Text = string.Empty;
+                Error.Content = "heslo změněno";
+            }
         }
     }
 }

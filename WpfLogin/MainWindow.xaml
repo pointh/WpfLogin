@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfLogin"
         mc:Ignorable="d"
-        Title="Přihlášení" Height="80" Width="800">
+        Title="Přihlášení" Height="80" Width="900">
     <StackPanel Orientation="Horizontal">
         <Label Content="User ID"/>
         <TextBox Name="UserID" 
                  Width="100" 
-                 Margin="0, 0, 50, 0" 
-                 Background="LightGoldenrodYellow"/>
+                 Margin="20, 10, 50, 10" 
+                 Background="LightGoldenrodYellow"
+                 IsEnabled="False"/>
         <Label Content="Heslo"/>
         <TextBox Name="Password" 
                  Width="100" 
-                 Margin="0, 0, 50, 0" 
+                 Margin="20, 10, 50, 10" 
                  Background="LightGoldenrodYellow" 
                  TextChanged="Password_TextChanged"/>
         <Label Name="Error" 
@@ -23,8 +24,19 @@
                Content="Chyba hesla" 
                Foreground="Red"/>
         <Button x:Name="Submit" 
-                Content="Odeslat" 
+                Content="Přihlásit" 
                 HorizontalAlignment="Right" 
+                Margin="10"
                 Click="Submit_Click"/>
+        <Button x:Name="Logout" 
+                Content="Odhlásit" 
+                HorizontalAlignment="Right" 
+                Margin="10"
+                Click="Logout_Click"/>
+        <Button x:Name="Change" 
+                Content="Změna hesla" 
+                HorizontalAlignment="Right" 
+                Margin="10"
+                Click="Change_Click"/>
     </StackPanel>
 </Window>
