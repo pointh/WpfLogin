@@ -27,9 +27,9 @@ namespace WpfLogin
             this.inputValidator = inputValidator;
         }
 
-        public bool IsPasswordValid(string password)
+        public bool IsPasswordValid(string pwd)
         {
-            return inputValidator.IsPasswordValid(password) && passwordHistory.Contains(password) == false;   
+            return inputValidator.IsPasswordValid(pwd) && passwordHistory.Contains(pwd) == false;
         }
     }
 }

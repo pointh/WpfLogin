@@ -21,27 +21,42 @@ namespace WpfLogin
     /// </summary>
     public partial class MainWindow : Window
     {
+        CommonUser user;
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private bool IsPasswordOK(string password, IValidator valid)
-        {
-            return valid.IsPasswordValid(password);
+            user = new CommonUser("root", "");
+            UserID.Text = "root";
         }
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            App.Root = SuperUser.GetOrCreate(UserID.Text, Password.Text);
-            Title = "Přihlášený " + App.Root.UserID;
+            if (user.ValidatePassword(
+                new List<IValidator>(
+                    new IValidator[] {
+                        new ValidatorSpecialChars(),
+                        new ValidatorNumbers()
+                    })
+                ) == LoginError.OK)
+            {
+                App.Root = SuperUser.GetOrCreate(UserID.Text, Password.Text);
+                Title = "Přihlášený " + App.Root.UserID;
+            }
         }
 
         private void Password_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // modifikuj pouze instanci IValidator, pokud chceš jiná kritéria
-            if (IsPasswordOK((sender as TextBox).Text, new ValidatorWithHistory("RootPasswordHistory.txt", new ValidatorNumbers())))
+            user.Password = (sender as TextBox).Text;
+            // modifikuj pouze instanci IValidator[], pokud chceš jiná kritéria
+            if (user?.ValidatePassword(
+                new List<IValidator>(
+                    new IValidator[] { 
+                        new ValidatorSpecialChars(), 
+                        new ValidatorNumbers() 
+                    })
+                ) == LoginError.OK)
             {
+                user.Password = Password.Text;
                 Error.Visibility = Visibility.Hidden;
                 return;
             }
