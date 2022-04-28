@@ -22,7 +22,7 @@ namespace WpfLogin
             if (instance == null)
             {
                 instance = new SuperUser(cu.UserID, cu.Password);
-                instance.AddPasswordHistory();
+                instance.AddPasswordToHistory();
             }
 
             return instance;

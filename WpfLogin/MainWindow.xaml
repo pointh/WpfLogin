@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfLogin"
         mc:Ignorable="d"
-        Title="Přihlášení" Height="80" Width="900">
+        Title="Přihlášení" Height="80" Width="960">
     <StackPanel Orientation="Horizontal">
         <Label Content="User ID"/>
         <TextBox Name="UserID" 
@@ -23,11 +23,16 @@
                Width="200" 
                Content="Chyba hesla" 
                Foreground="Red"/>
-        <Button x:Name="Submit" 
+        <Button x:Name="Create" 
+                Content="Vytvořit" 
+                HorizontalAlignment="Right" 
+                Margin="10"
+                Click="Create_Click"/>
+        <Button x:Name="Login" 
                 Content="Přihlásit" 
                 HorizontalAlignment="Right" 
                 Margin="10"
-                Click="Submit_Click"/>
+                Click="Login_Click"/>
         <Button x:Name="Logout" 
                 Content="Odhlásit" 
                 HorizontalAlignment="Right" 

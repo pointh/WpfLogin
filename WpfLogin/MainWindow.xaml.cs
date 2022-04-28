@@ -31,7 +31,7 @@ namespace WpfLogin
             UserID.Text = "root";
         }
 
-        private void Submit_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
             loginError = user.ValidatePassword(
                 new List<IValidator>(
@@ -106,6 +106,11 @@ namespace WpfLogin
                 Password.Text = string.Empty;
                 Error.Content = "heslo změněno";
             }
+        }
+
+        private void Create_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

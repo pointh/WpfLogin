@@ -12,15 +12,16 @@ namespace WpfLogin
     {
         public string UserID { get; set; }
         public string Password { get; set; }
+        public bool LoggedIn { get; set; }
 
-        protected Guid uniqueID;
-        protected string passwordHistoryFile;
-        protected List<string> passwordHistory;
+        string passwordHistoryFile;
+        List<string> passwordHistory;
 
         public CommonUser(string id, string pwd)
         {
-            this.UserID = id;
-            this.Password = pwd;
+            UserID = id;
+            Password = pwd;
+            LoggedIn = false;
 
             SHA256 sha = SHA256.Create();
             byte[] shaB = sha.ComputeHash(Encoding.GetEncoding("UTF-8").GetBytes(id));
@@ -45,22 +46,45 @@ namespace WpfLogin
                 passwordHistory = new List<string>();
             }
 
-            if (string.IsNullOrEmpty(pwd) == false)
+            if (string.IsNullOrEmpty(Password) == false)
             {
-                passwordHistory.Add(pwd);
-                File.WriteAllLines(passwordHistoryFile, passwordHistory.ToArray());
+                AddPasswordToHistory();
             }
         }
 
-        public void AddPasswordHistory()
+        public bool Login(string openPassword)
+        {
+            if (passwordHistory.Count > 0)
+            {
+                string currentHashedPassword = passwordHistory[passwordHistory.Count - 1];
+                if (HashString(openPassword) == currentHashedPassword)
+                {
+                    LoggedIn = true;
+                    return true;
+                }
+            }
+
+            LoggedIn = false;
+            return false;
+        }
+
+        string HashString(string s)
+        {
+            SHA256 sha = SHA256.Create();
+            byte[] shaB = sha.ComputeHash(Encoding.GetEncoding("UTF-8").GetBytes(s));
+            return Convert.ToBase64String(shaB);
+        }
+
+        public void AddPasswordToHistory()
         {
             if (File.Exists(passwordHistoryFile))
             {
                 try
                 {
-                    File.AppendText("\n" + Password);
+                    passwordHistory.Add(HashString(Password));
+                    File.WriteAllLines(passwordHistoryFile, passwordHistory.ToArray());
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                     Console.WriteLine(
                         $"Error in {MethodBase.GetCurrentMethod()}:" +
